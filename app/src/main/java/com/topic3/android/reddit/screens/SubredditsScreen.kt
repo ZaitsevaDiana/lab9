@@ -3,23 +3,14 @@ package com.topic3.android.reddit.screens
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -79,6 +70,55 @@ fun Subreddit(subredditModel: SubredditModel, modifier: Modifier = Modifier) {
 @Composable
 fun SubredditBody(subredditModel: SubredditModel, modifier: Modifier = Modifier) {
     //TODO add your code here
+    ConstraintLayout(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colors.surface)
+    ) {
+        val (backgroundImage, icon, name, members, description) = createRefs() // 2
+
+        SubredditImage(//2
+            modifier= modifier.constrainAs(backgroundImage) {
+                centerHorizontallyTo(parent)
+                top.linkTo(parent.top)
+            }
+        )
+
+        SubredditIcon(//3
+            modifier = modifier
+                .constrainAs(icon) {
+                    top.linkTo(backgroundImage.bottom)
+                    bottom.linkTo(backgroundImage.bottom)
+                    centerHorizontallyTo(parent)
+                }
+                .zIndex(1f)
+        )
+
+        SubredditName(//4
+            nameStringRes= subredditModel.nameStringRes,
+            modifier= modifier.constrainAs(name) {
+                top.linkTo(icon.bottom)
+                centerHorizontallyTo(parent)
+            }
+        )
+
+        SubredditMembers(// 5
+            membersStringRes =subredditModel.membersStringRes,
+            modifier =modifier.constrainAs(members) {
+                top.linkTo(name.bottom)
+                centerHorizontallyTo(parent)
+            }
+        )
+
+        SubredditDescription( // 6
+            descriptionStringRes= subredditModel.descriptionStringRes,
+            modifier= modifier.constrainAs(description) {
+                top.linkTo(members.bottom)
+                centerHorizontallyTo (parent)
+            }
+        )
+    }
+
 }
 
 @Composable
